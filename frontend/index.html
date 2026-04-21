@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>JourneyFlow | DevOps Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f4fa 0%, #d9e2ec 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* subtle animated background pattern */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#2c3e66 0.8px, transparent 0.8px);
+            background-size: 28px 28px;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+
+        /* main card container */
+        .journey-card {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(2px);
+            border-radius: 3rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* header area with journey theme */
+        .hero-header {
+            background: linear-gradient(112deg, #1e2b3c 0%, #0f212f 100%);
+            padding: 2rem 2rem 1.8rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-header::after {
+            content: "✧ ✦ ✧";
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            font-size: 0.8rem;
+            letter-spacing: 6px;
+            color: rgba(255, 215, 150, 0.6);
+            font-weight: 300;
+        }
+
+        .hero-header h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #FFF8E7, #FFE6B3);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-tagline {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.85;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .hero-tagline span {
+            background: rgba(255,255,240,0.18);
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(2px);
+        }
+
+        /* main content area */
+        .content-panel {
+            padding: 2rem 2rem 2.2rem;
+        }
+
+        .journey-intro {
+            background: #eef3fc;
+            border-radius: 2rem;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 6px solid #3b82f6;
+            box-shadow: 0 6px 12px -8px rgba(0,0,0,0.1);
+        }
+
+        .journey-intro p {
+            color: #1e293b;
+            font-weight: 500;
+            font-size: 1rem;
+            line-height: 1.4;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .journey-intro .map-icon {
+            font-size: 1.6rem;
+        }
+
+        .api-section {
+            background: #ffffffcc;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid #ffffff;
+            transition: transform 0.2s;
+        }
+
+        .api-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            border-bottom: 2px dashed #cbd5e1;
+            padding-bottom: 0.65rem;
+        }
+
+        .api-header h3 {
+            font-weight: 700;
+            color: #0f2c3d;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-devops {
+            background: #1e293b;
+            color: #facc15;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.8rem;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-journey {
+            background: linear-gradient(95deg, #0f2c3f, #1f4b6e);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 14px rgba(0, 32, 64, 0.25);
+            border: 1px solid rgba(255,255,210,0.2);
+        }
+
+        .btn-journey:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(95deg, #1c405a, #2a628f);
+            box-shadow: 0 12px 22px -8px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-journey:active {
+            transform: translateY(2px);
+        }
+
+        .response-area {
+            margin-top: 1.8rem;
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 0.2rem;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 10px 20px -5px rgba(0,0,0,0.2);
+        }
+
+        .response-header {
+            background: #1e293b;
+            padding: 0.75rem 1.2rem;
+            border-radius: 1.5rem 1.5rem 0 0;
+            color: #cbd5e6;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #334155;
+        }
+
+        .response-content {
+            background: #0b1120;
+            padding: 1.2rem;
+            border-radius: 0 0 1.5rem 1.5rem;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #a5f3c3;
+            word-break: break-word;
+            white-space: pre-wrap;
+            min-height: 100px;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .placeholder-text {
+            color: #6c86a3;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* journey timeline inspiration */
+        .journey-timeline {
+            margin-top: 1.8rem;
+            background: rgba(245, 248, 250, 0.7);
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+
+        .timeline-title {
+            font-weight: 700;
+            color: #1e2f3e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .timeline-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .timeline-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 0.6rem 1rem;
+            border-radius: 60px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            background: #eef2ff;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .step-text {
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .footer-note {
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #4a627a;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1rem;
+        }
+
+        @media (max-width: 550px) {
+            body { padding: 1rem; }
+            .hero-header h1 { font-size: 2rem; }
+            .content-panel { padding: 1.5rem; }
+            .btn-journey { width: 100%; justify-content: center; }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.7s linear infinite;
+            margin-right: 6px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="journey-card">
+    <div class="hero-header">
+        <h1>✦ JourneyFlow ✦</h1>
+        <div class="hero-tagline">
+            <span>⚡ DevOps Odyssey</span>
+            <span>🌍 Cloud Pathfinder</span>
+            <span>🚀 Infinite Routes</span>
+        </div>
+    </div>
+
+    <div class="content-panel">
+        <div class="journey-intro">
+            <p>
+                <span class="map-icon">🗺️</span> 
+                <strong>Your journey begins here</strong> — each API call maps a new discovery. 
+                Embrace the flow of continuous integration & exploration.
+            </p>
+        </div>
+
+        <div class="api-section">
+            <div class="api-header">
+                <h3>
+                    <span>📡</span> API Expedition
+                    <span class="badge-devops">RESTful frontier</span>
+                </h3>
+                <div>
+                    <button class="btn-journey" id="callApiBtn">
+                        <span>🔮</span> Call the journey API
+                    </button>
+                </div>
+            </div>
+            <div class="response-area">
+                <div class="response-header">
+                    <span>📦 API Response · live trail</span>
+                    <span style="font-size: 0.7rem;">backend:3000</span>
+                </div>
+                <div class="response-content" id="responseContainer">
+                    <div class="placeholder-text">
+                        <span>✨</span> Waiting for your first API call — press the button to begin the journey
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- inspirational journey timeline (just UI storytelling) -->
+        <div class="journey-timeline">
+            <div class="timeline-title">
+                <span>🧭</span> today's journey steps
+            </div>
+            <div class="timeline-items">
+                <div class="timeline-step">
+                    <div class="step-icon">1</div>
+                    <div class="step-text">🌱 Connect to backend service (HTTP call)</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-icon">2</div>
+                    <div class="step-text">⚙️ Receive dynamic journey data</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-icon">3</div>
+                    <div class="step-text">🌟 Visualize & log your expedition</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-icon">4</div>
+                    <div class="step-text">🚢 Continuous deployment spirit</div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-note">
+            🌊 Every API response writes a new story · built for modern explorers & DevOps journeys
+        </div>
+    </div>
+</div>
+
+<script>
+    // enhanced fetchData with error handling, loading state, and beautiful JSON representation
+    async function fetchData() {
+        const responseContainer = document.getElementById('responseContainer');
+        const callBtn = document.getElementById('callApiBtn');
+        
+        // save original button content to restore later
+        const originalBtnHTML = callBtn.innerHTML;
+        
+        // loading state UI
+        callBtn.innerHTML = '<span class="loading-spinner"></span> summoning API ...';
+        callBtn.disabled = true;
+        
+        // show loading animation in response area
+        responseContainer.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 12px; color: #cbd5e6;">
+                <div class="loading-spinner" style="border-top-color:#60a5fa; border-width:2px;"></div>
+                <span>🛤️ Fetching journey data from backend ...</span>
+            </div>
+        `;
+        
+        try {
+            // IMPORTANT: The original endpoint used "http://backend:3000" (relative to container/host)
+            // To align with typical local dev & demo, but we keep exact original URL for backend resolution.
+            // In a real scenario, if backend is not reachable, we will show fallback but keep the API spirit.
+            // For modern web, we also implement a timeout to avoid infinite waiting.
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+            
+            const res = await fetch("/api", {
+                signal: controller.signal,
+                headers: {
+                    'Accept': 'application/json',
+                }
+            });
+            clearTimeout(timeoutId);
+            
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+            
+            const data = await res.json();
+            
+            // format output nicely - pretty print JSON if object/array
+            let formattedOutput = "";
+            if (typeof data === 'object') {
+                formattedOutput = JSON.stringify(data, null, 2);
+                // syntax highlight-like with spans? but we use monospace + light colors
+            } else {
+                formattedOutput = String(data);
+            }
+            
+            // additional journey context : we detect if data contains 'journey' or 'message' etc.
+            let journeyBadge = '';
+            if (data && typeof data === 'object') {
+                if (data.message || data.status || data.journey) {
+                    journeyBadge = '<span style="background:#2a475c; padding:2px 8px; border-radius:30px; font-size:0.7rem;">✨ journey fragment</span>';
+                }
+            }
+            
+            responseContainer.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items:center; flex-wrap:wrap;">
+                        <span style="color:#94a3b8; font-size:0.7rem;">✓ API response received</span>
+                        ${journeyBadge}
+                    </div>
+                    <pre style="margin:0; font-family: 'Fira Code', monospace; font-size:0.8rem; overflow-x:auto; white-space:pre-wrap; word-break:break-word; color:#bbf0d0;">${escapeHtml(formattedOutput)}</pre>
+                    <div style="border-top: 1px solid #2d3e5a; margin-top: 6px; padding-top: 6px; font-size:0.7rem; color:#7e9ab5;">
+                        🧭 journey recorded · timestamp ${new Date().toLocaleTimeString()}
+                    </div>
+                </div>
+            `;
+            
+            // also log to console as original behavior but enriched
+            console.log("Journey API response:", data);
+            
+        } catch (error) {
+            let errorMsg = "";
+            if (error.name === 'AbortError') {
+                errorMsg = "⏳ API timeout — backend not reachable or slow. Make sure backend service is running on 'backend:3000' (container environment).";
+            } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                errorMsg = "🌐 Network journey blocked / backend unreachable. Check if backend service is active and CORS / connectivity allows access. (Expected in local static environment without backend)";
+            } else {
+                errorMsg = `⚠️ Journey error: ${error.message}`;
+            }
+            
+            responseContainer.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div style="color:#fda4af; background:#3b1e2a; padding:0.5rem; border-radius:1rem;">
+                        <span>🚧</span> <strong>Expedition interrupted</strong>
+                    </div>
+                    <div style="color:#facc15; font-family: monospace; font-size:0.8rem;">${escapeHtml(errorMsg)}</div>
+                    <div style="font-size:0.7rem; color:#5f7f9e;">💡 tip: In a real DevOps pipeline, ensure backend service is exposed or use mock mode. But your journey spirit remains!</div>
+                </div>
+            `;
+            console.error("API fetch error:", error);
+        } finally {
+            // restore button state
+            callBtn.innerHTML = originalBtnHTML;
+            callBtn.disabled = false;
+        }
+    }
+    
+    // simple helper to avoid XSS and preserve formatting
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+    
+    // attach event listener to button (ensuring DOM fully loaded)
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('callApiBtn');
+        if (btn) {
+            // remove any existing listeners to be safe, then attach
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.addEventListener('click', fetchData);
+            // reassign id to keep reference consistent
+            newBtn.id = 'callApiBtn';
+        }
+        
+        // Optional: show a little welcome message in console
+        console.log("💫 JourneyFlow UI ready · awaiting API expedition to backend:3000");
+        
+        // Additional decorative: simulate that the journey is alive
+        const responseDiv = document.getElementById('responseContainer');
+        if (responseDiv && responseDiv.innerHTML.includes('Waiting')) {
+            // keep placeholder
+        }
+    });
+    
+    // also handle if script runs after load
+    if (document.readyState === 'loading') {
+        // already waiting for DOMContentLoaded
+    } else {
+        // if script loaded after dom, ensure button exists
+        if (document.getElementById('callApiBtn')) {
+            const btn = document.getElementById('callApiBtn');
+            // avoid double binding
+            if (!btn.hasAttribute('data-listener')) {
+                btn.setAttribute('data-listener', 'true');
+                btn.addEventListener('click', fetchData);
+            }
+        }
+    }
+</script>
+</body>
+</html>

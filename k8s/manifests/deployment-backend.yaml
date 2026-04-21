@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: obito991/backend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DB_HOST
+          value: db
+        - name: DB_USER
+          value: user
+        - name: DB_PASSWORD
+          value: password
+        - name: DB_NAME
+          value: mydb
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 3000 # service port that must match ingress
+      targetPort: 3000

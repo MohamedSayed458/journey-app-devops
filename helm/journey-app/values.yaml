@@ -1,0 +1,32 @@
+frontend:
+  image:
+    repository: obito991/frontend
+    tag: latest
+    pullPolicy: Always
+
+backend:
+  image:
+    repository: obito991/backend
+    tag: latest
+    pullPolicy: Always
+
+db:
+  image:
+    repository: postgres
+    tag: "15"
+    pullPolicy: IfNotPresent
+
+service:
+  frontendPort: 80
+  backendPort: 3000
+  dbPort: 5432
+
+ingress:
+  enabled: true
+  className: nginx
+
+secrets:
+  dbHost: "db"
+  dbUser: "user"
+  dbPassword: "password"
+  dbName: "mydb"
