@@ -1,6 +1,9 @@
+
 # Journey App DevOps Project
 
-This project demonstrates a complete DevOps-ready web application deployment using Kubernetes and Helm.
+This project demonstrates a **production-style end-to-end DevOps pipeline** for deploying a full-stack web application using Docker, Kubernetes (EKS), Helm, and Jenkins CI/CD.
+
+---
 
 ## Tech Stack
 
@@ -8,10 +11,11 @@ This project demonstrates a complete DevOps-ready web application deployment usi
 - **Backend:** Node.js (Express)
 - **Database:** PostgreSQL
 - **Containerization:** Docker
-- **Orchestration:** Kubernetes (EKS)
+- **Orchestration:** Kubernetes (AWS EKS)
 - **Deployment:** Helm
-- **CI/CD (planned):** Jenkins
-- **Cloud:** AWS (EC2 + LoadBalancer)
+- **CI/CD:** Jenkins (Pipeline)
+- **Ingress:** NGINX Ingress Controller
+- **Cloud:** AWS (EC2 + EKS + LoadBalancer)
 
 ---
 
@@ -22,46 +26,80 @@ This project demonstrates a complete DevOps-ready web application deployment usi
 frontend/ # Static web app (Nginx)  
 backend/ # Node.js API  
 helm/ # Helm chart for full deployment  
-k8s/ # Raw manifests (reference only)  
-docker-compose.yml
+k8s/ # Raw Kubernetes manifests (reference only)  
+docker-compose.yml # Local development setup  
+Jenkinsfile # CI/CD pipeline definition
 
-````
+```
 
 ---
 
-## Features
+## CI/CD Pipeline (Jenkins)
 
-- 🔹 Full Kubernetes deployment using Helm
-- 🔹 Ingress routing:
-  - `/` → frontend
-  - `/api` → backend
-- 🔹 Dockerized frontend and backend
-- 🔹 PostgreSQL database running inside the cluster
-- 🔹 Kubernetes Secrets used for database configuration
-- 🔹 Clean and scalable architecture ready for CI/CD
+This project includes a fully automated CI/CD pipeline:
+
+```
+
+GitHub Push  
+↓  
+Jenkins Pipeline  
+↓  
+Build Docker Images (frontend & backend)  
+↓  
+Push Images to Docker Hub  
+↓  
+Deploy to Kubernetes using Helm  
+↓  
+Rolling Update on EKS Cluster
+
+````
+
+### Automation
+
+- GitHub Webhook triggers Jenkins automatically on every push
+- No manual deployment required
+- Zero-downtime rolling updates using Kubernetes
+
+---
+
+## Application Routing
+
+Using NGINX Ingress Controller:
+
+- `/` → Frontend (Nginx)
+- `/api` → Backend (Node.js)
+
+---
+
+## Secrets Management
+
+- Kubernetes Secrets are used for:
+  - Database credentials
+  - Backend environment variables
 
 ---
 
 ## Deployment
 
-Deploy the application using Helm:
+Deploy manually with Helm:
 
 ```bash
 helm upgrade --install journey-app ./helm/journey-app
 ````
 
+Or automatically via Jenkins pipeline.
+
 ---
 
-## Access
+## Live Application
 
-The application is exposed using an AWS LoadBalancer via NGINX Ingress Controller.
+The application is exposed using an AWS LoadBalancer:
 
-🌐 Live URL:
-http://a12dbdb2a78324118ba89471eb8275c4-e04e8f518750cc31.elb.eu-north-1.amazonaws.com/
-
+👉 [http://a12dbdb2a78324118ba89471eb8275c4-e04e8f518750cc31.elb.eu-north-1.amazonaws.com/](http://a12dbdb2a78324118ba89471eb8275c4-e04e8f518750cc31.elb.eu-north-1.amazonaws.com/)
 
 ---
 
 ## Author
 
-Mohamed Newish (DevOps / Cloud / Kubernetes)
+**Mohamed Newish**  
+DevOps Engineer | Cloud | Kubernetes | CI/CD

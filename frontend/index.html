@@ -22,7 +22,6 @@
             position: relative;
         }
 
-        /* subtle animated background pattern */
         body::before {
             content: "";
             position: absolute;
@@ -36,7 +35,6 @@
             pointer-events: none;
         }
 
-        /* main card container */
         .journey-card {
             max-width: 700px;
             width: 100%;
@@ -49,7 +47,6 @@
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        /* header area with journey theme */
         .hero-header {
             background: linear-gradient(112deg, #1e2b3c 0%, #0f212f 100%);
             padding: 2rem 2rem 1.8rem 2rem;
@@ -102,7 +99,6 @@
             backdrop-filter: blur(2px);
         }
 
-        /* main content area */
         .content-panel {
             padding: 2rem 2rem 2.2rem;
         }
@@ -240,7 +236,6 @@
             gap: 10px;
         }
 
-        /* journey timeline inspiration */
         .journey-timeline {
             margin-top: 1.8rem;
             background: rgba(245, 248, 250, 0.7);
@@ -295,6 +290,66 @@
             color: #1e293b;
         }
 
+        .creator-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            text-align: center;
+            box-shadow: 0 10px 25px -10px rgba(0,0,0,0.4);
+        }
+
+        .creator-section h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .creator-section p {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .creator-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .creator-links a {
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            transition: 0.2s ease;
+            font-weight: 600;
+        }
+
+        .github-link {
+            background: #111827;
+            color: #facc15;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .linkedin-link {
+            background: #0a66c2;
+            color: white;
+        }
+
+        .creator-links a:hover {
+            transform: translateY(-2px);
+            opacity: 0.92;
+        }
+
+        .creator-stack {
+            margin-top: 12px;
+            font-size: 0.7rem;
+            opacity: 0.65;
+        }
+
         .footer-note {
             margin-top: 2rem;
             font-size: 0.7rem;
@@ -343,7 +398,7 @@
         <div class="journey-intro">
             <p>
                 <span class="map-icon">🗺️</span> 
-                <strong>Your journey begins here</strong> — each API call maps a new discovery. 
+                <strong>Your journey begins here</strong> — each API call maps a new discovery.
                 Embrace the flow of continuous integration & exploration.
             </p>
         </div>
@@ -363,7 +418,7 @@
             <div class="response-area">
                 <div class="response-header">
                     <span>📦 API Response · live trail</span>
-                    <span style="font-size: 0.7rem;">backend:3000</span>
+                    <span style="font-size: 0.7rem;">/api via ingress</span>
                 </div>
                 <div class="response-content" id="responseContainer">
                     <div class="placeholder-text">
@@ -373,7 +428,6 @@
             </div>
         </div>
 
-        <!-- inspirational journey timeline (just UI storytelling) -->
         <div class="journey-timeline">
             <div class="timeline-title">
                 <span>🧭</span> today's journey steps
@@ -381,7 +435,7 @@
             <div class="timeline-items">
                 <div class="timeline-step">
                     <div class="step-icon">1</div>
-                    <div class="step-text">🌱 Connect to backend service (HTTP call)</div>
+                    <div class="step-text">🌱 Connect to backend service through ingress</div>
                 </div>
                 <div class="timeline-step">
                     <div class="step-icon">2</div>
@@ -397,72 +451,85 @@
                 </div>
             </div>
         </div>
+
+        <div class="creator-section">
+            <h3>👨‍💻 Created by Mohamed Newish</h3>
+            <p>
+                DevOps-focused project builder passionate about Cloud, Kubernetes, CI/CD pipelines,
+                and turning ideas into scalable real-world deployments.
+            </p>
+
+            <div class="creator-links">
+                <a class="github-link" href="https://github.com/MohamedSayed458" target="_blank" rel="noopener noreferrer">
+                    💻 GitHub
+                </a>
+
+                <a class="linkedin-link" href="https://www.linkedin.com/in/mohamed-newish-8470a5395" target="_blank" rel="noopener noreferrer">
+                    🔗 LinkedIn
+                </a>
+            </div>
+
+            <div class="creator-stack">
+                ✨ Built with Docker · Kubernetes · Helm · Jenkins · AWS
+            </div>
+        </div>
+
         <div class="footer-note">
-            🌊 Every API response writes a new story · built for modern explorers & DevOps journeys
+            🌊 Every API response writes a new story · built by Mohamed Newish for modern DevOps journeys
         </div>
     </div>
 </div>
 
 <script>
-    // enhanced fetchData with error handling, loading state, and beautiful JSON representation
     async function fetchData() {
         const responseContainer = document.getElementById('responseContainer');
         const callBtn = document.getElementById('callApiBtn');
-        
-        // save original button content to restore later
+
         const originalBtnHTML = callBtn.innerHTML;
-        
-        // loading state UI
+
         callBtn.innerHTML = '<span class="loading-spinner"></span> summoning API ...';
         callBtn.disabled = true;
-        
-        // show loading animation in response area
+
         responseContainer.innerHTML = `
             <div style="display: flex; align-items: center; gap: 12px; color: #cbd5e6;">
                 <div class="loading-spinner" style="border-top-color:#60a5fa; border-width:2px;"></div>
                 <span>🛤️ Fetching journey data from backend ...</span>
             </div>
         `;
-        
+
         try {
-            // IMPORTANT: The original endpoint used "http://backend:3000" (relative to container/host)
-            // To align with typical local dev & demo, but we keep exact original URL for backend resolution.
-            // In a real scenario, if backend is not reachable, we will show fallback but keep the API spirit.
-            // For modern web, we also implement a timeout to avoid infinite waiting.
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 8000);
-            
+
             const res = await fetch("/api", {
                 signal: controller.signal,
                 headers: {
                     'Accept': 'application/json',
                 }
             });
+
             clearTimeout(timeoutId);
-            
+
             if (!res.ok) {
                 throw new Error(`HTTP ${res.status}: ${res.statusText}`);
             }
-            
+
             const data = await res.json();
-            
-            // format output nicely - pretty print JSON if object/array
+
             let formattedOutput = "";
             if (typeof data === 'object') {
                 formattedOutput = JSON.stringify(data, null, 2);
-                // syntax highlight-like with spans? but we use monospace + light colors
             } else {
                 formattedOutput = String(data);
             }
-            
-            // additional journey context : we detect if data contains 'journey' or 'message' etc.
+
             let journeyBadge = '';
             if (data && typeof data === 'object') {
                 if (data.message || data.status || data.journey) {
                     journeyBadge = '<span style="background:#2a475c; padding:2px 8px; border-radius:30px; font-size:0.7rem;">✨ journey fragment</span>';
                 }
             }
-            
+
             responseContainer.innerHTML = `
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <div style="display: flex; justify-content: space-between; align-items:center; flex-wrap:wrap;">
@@ -475,38 +542,35 @@
                     </div>
                 </div>
             `;
-            
-            // also log to console as original behavior but enriched
+
             console.log("Journey API response:", data);
-            
+
         } catch (error) {
             let errorMsg = "";
             if (error.name === 'AbortError') {
-                errorMsg = "⏳ API timeout — backend not reachable or slow. Make sure backend service is running on 'backend:3000' (container environment).";
+                errorMsg = "⏳ API timeout — backend not reachable or slow. Check the backend service and ingress route.";
             } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                errorMsg = "🌐 Network journey blocked / backend unreachable. Check if backend service is active and CORS / connectivity allows access. (Expected in local static environment without backend)";
+                errorMsg = "🌐 Network journey blocked / backend unreachable. Check ingress, backend service, and cluster connectivity.";
             } else {
                 errorMsg = `⚠️ Journey error: ${error.message}`;
             }
-            
+
             responseContainer.innerHTML = `
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <div style="color:#fda4af; background:#3b1e2a; padding:0.5rem; border-radius:1rem;">
                         <span>🚧</span> <strong>Expedition interrupted</strong>
                     </div>
                     <div style="color:#facc15; font-family: monospace; font-size:0.8rem;">${escapeHtml(errorMsg)}</div>
-                    <div style="font-size:0.7rem; color:#5f7f9e;">💡 tip: In a real DevOps pipeline, ensure backend service is exposed or use mock mode. But your journey spirit remains!</div>
+                    <div style="font-size:0.7rem; color:#5f7f9e;">💡 tip: In a real DevOps pipeline, ensure ingress, backend service, and deployment rollout are healthy.</div>
                 </div>
             `;
             console.error("API fetch error:", error);
         } finally {
-            // restore button state
             callBtn.innerHTML = originalBtnHTML;
             callBtn.disabled = false;
         }
     }
-    
-    // simple helper to avoid XSS and preserve formatting
+
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -518,37 +582,22 @@
             return c;
         });
     }
-    
-    // attach event listener to button (ensuring DOM fully loaded)
+
     document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('callApiBtn');
         if (btn) {
-            // remove any existing listeners to be safe, then attach
             const newBtn = btn.cloneNode(true);
             btn.parentNode.replaceChild(newBtn, btn);
             newBtn.addEventListener('click', fetchData);
-            // reassign id to keep reference consistent
             newBtn.id = 'callApiBtn';
         }
-        
-        // Optional: show a little welcome message in console
-        console.log("💫 JourneyFlow UI ready · awaiting API expedition to backend:3000");
-        
-        // Additional decorative: simulate that the journey is alive
-        const responseDiv = document.getElementById('responseContainer');
-        if (responseDiv && responseDiv.innerHTML.includes('Waiting')) {
-            // keep placeholder
-        }
+
+        console.log("💫 JourneyFlow UI ready · awaiting API expedition through /api");
     });
-    
-    // also handle if script runs after load
-    if (document.readyState === 'loading') {
-        // already waiting for DOMContentLoaded
-    } else {
-        // if script loaded after dom, ensure button exists
+
+    if (document.readyState !== 'loading') {
         if (document.getElementById('callApiBtn')) {
             const btn = document.getElementById('callApiBtn');
-            // avoid double binding
             if (!btn.hasAttribute('data-listener')) {
                 btn.setAttribute('data-listener', 'true');
                 btn.addEventListener('click', fetchData);
