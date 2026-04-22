@@ -5,3 +5,4 @@ backend/node_modules
 .DS_Store
 frontend/nourhan.html
 frontend/picture.jpg
+Jenkins-key-EC2.pem
